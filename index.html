@@ -1,1 +1,68 @@
+HTML
+
+<!DOCTYPE html>
+<html lang="mr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MAULI MOBILE SHOP</title>
+<style>
+body {
+  font-family: Arial;
+  margin: 0;
+  background: #f2f2f2;
+  text-align: center;
+}
+header {
+  background: #101c36;
+  color: white;
+  padding: 25px;
+}
+h1 { color: white; }
+.product {
+  background: white;
+  margin: 15px;
+  padding: 20px;
+  border-radius: 12px;
+}
+button {
+  background: green;
+  color: white;
+  padding: 12px 20px;
+  border: none;
+  border-radius: 8px;
+}
+</style>
+</head>
+<body>
+
+<header>
+<h1>MAULI MOBILE SHOP</h1>
+<p>Mobile Repairing & Accessories</p>
+<p>📞 9022459180</p>
+</header>
+
+<div class="product">
+<h2>Mobile Accessories</h2>
+<p>मोबाईल संबंधित सर्व साहित्य उपलब्ध</p>
+<button onclick="order()">WhatsApp Order</button>
+</div>
+
+<div class="product">
+<h2>Mobile Repairing</h2>
+<p>सर्व प्रकारचे मोबाईल दुरुस्त केले जातात.</p>
+<button onclick="order()">Contact Now</button>
+</div>
+
+<script>
+function order() {
+  window.open(
+    "https://wa.me/919022459180",
+    "_blank"
+  );
+}
+</script>
+
+</body>
+</html>
 
