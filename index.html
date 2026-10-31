@@ -3,37 +3,35 @@
 <html lang="mr">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width,initial-scale=1">
 <title>MAULI MOBILE SHOP</title>
 <style>
 *{box-sizing:border-box}
 body{margin:0;font-family:Arial;background:#f2f3f6;color:#222}
-header{background:#101c36;color:white;text-align:center;padding:25px 12px}
-header h1{font-size:27px}
-.top{background:white;padding:12px;position:sticky;top:0;z-index:5}
-input,select{width:100%;padding:12px;margin:6px 0;border:1px solid #ccc;border-radius:8px;font-size:15px}
-button{cursor:pointer;border:0;border-radius:8px;padding:11px}
-.admin-btn{background:#f0a500;color:#111;width:100%;font-weight:bold}
+header{background:#101c36;color:white;text-align:center;padding:22px 10px}
+header h1{margin:5px;font-size:25px}
 .panel,.cart{background:white;margin:12px;padding:15px;border-radius:12px}
+input,select{width:100%;padding:12px;margin:6px 0;border:1px solid #ccc;border-radius:8px}
+button{padding:10px;border:0;border-radius:7px;cursor:pointer}
+.admin{background:#f0a500;width:100%;font-weight:bold}
+.save{background:#101c36;color:white;width:100%;margin-top:8px}
+.add{background:#07852b;color:white;width:100%}
+.delete{background:#c62828;color:white}
+.pay{background:#1769aa;color:white;width:100%;margin-top:8px}
+.order{background:#07852b;color:white;width:100%;margin-top:8px}
 .hidden{display:none}
-.categories{display:flex;overflow-x:auto;gap:8px;padding:12px}
+.categories{display:flex;overflow-x:auto;gap:7px;padding:12px}
 .categories button{white-space:nowrap;background:#ddd}
 .categories .active{background:#101c36;color:white}
-.products{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;padding:12px}
-.card{background:white;border-radius:12px;padding:12px;text-align:center;box-shadow:0 2px 7px #ddd;min-width:0}
-.card img{width:100%;height:115px;object-fit:contain}
-.emoji{font-size:48px;height:115px;display:flex;align-items:center;justify-content:center}
-.price{color:green;font-size:19px;font-weight:bold}
-.add{background:#07852b;color:white;width:100%}
-.save{background:#101c36;color:white;width:100%;margin-top:8px}
-.delete{background:#c62828;color:white;margin-top:8px}
-.row{display:flex;gap:6px;align-items:center}
-.row input{min-width:0}
-.cart-item{padding:10px 0;border-bottom:1px solid #ddd}
-.order{background:#07852b;color:white;width:100%;font-size:17px;margin-top:10px}
-.pay{background:#1769aa;color:white;width:100%;margin-top:8px}
-footer{background:#101c36;color:white;text-align:center;padding:25px}
+.products{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;padding:12px}
+.card{background:white;border-radius:12px;padding:12px;text-align:center;box-shadow:0 2px 6px #ddd}
+.card img{width:100%;height:110px;object-fit:contain}
+.emoji{font-size:45px;height:100px;display:grid;place-items:center}
+.price{color:green;font-weight:bold;font-size:19px}
+.variant{padding:8px;border:1px solid #ddd;border-radius:7px;margin:6px 0}
+.item{border-bottom:1px solid #ddd;padding:10px 0}
 .small{font-size:12px;color:#666}
+footer{background:#101c36;color:white;text-align:center;padding:20px}
 </style>
 </head>
 <body>
@@ -41,66 +39,73 @@ footer{background:#101c36;color:white;text-align:center;padding:25px}
 <header>
 <h1>MAULI MOBILE SHOP</h1>
 <p>Mobile Repairing & Accessories</p>
-<p>📍 Gowari, Mouda, Nagpur</p>
+<p>Gowari, Mouda, Nagpur</p>
 <p>📞 9022459180</p>
 </header>
 
-<div class="top">
-<input id="search" placeholder="🔍 वस्तू शोधा..." oninput="showProducts()">
-</div>
-
 <div class="panel">
-<button class="admin-btn" onclick="adminLogin()">🔐 ADMIN PANEL</button>
+<button class="admin" onclick="login()">🔐 ADMIN PANEL</button>
 </div>
 
-<section id="admin" class="panel hidden">
-<h2>⚙️ Admin Dashboard</h2>
-<p class="small">इथे प्रत्येक वस्तूची किंमत बदला.</p>
+<div id="admin" class="panel hidden">
+<h2>Admin Dashboard</h2>
 
-<div id="priceEditor"></div>
-<button class="save" onclick="savePrices()">💾 Save All Prices</button>
+<h3>नवीन Product तयार करा</h3>
+<input id="pname" placeholder="Product नाव">
+<select id="pcat"></select>
+<input id="pimage" placeholder="Photo URL (ऐच्छिक)">
+
+<h3>Product चा पहिला प्रकार</h3>
+<input id="vname" placeholder="उदा. 18W Charger">
+<input id="vprice" type="number" min="0" placeholder="किंमत ₹">
+<input id="vstock" type="number" min="0" placeholder="Stock संख्या">
+
+<button class="save" onclick="addProduct()">➕ Product सेव्ह करा</button>
 
 <hr>
-<h3>➕ नवीन Product जोडा</h3>
-<input id="newName" placeholder="Product Name">
-<select id="newCat"></select>
-<input id="newPrice" type="number" min="0" placeholder="विक्री किंमत ₹">
-<input id="newImage" placeholder="Photo URL (ऐच्छिक)">
-<button class="save" onclick="addProduct()">Add Product</button>
-<button class="delete" onclick="adminLogout()">Admin बंद करा</button>
-</section>
+<h3>नवीन प्रकार जोडा</h3>
+<select id="existing"></select>
+<input id="variantName" placeholder="प्रकार / Model">
+<input id="variantPrice" type="number" min="0" placeholder="किंमत ₹">
+<input id="variantStock" type="number" min="0" placeholder="Stock">
+<button class="save" onclick="addVariant()">Add Variant</button>
+
+<hr>
+<h3>सर्व Products आणि किंमती</h3>
+<div id="editor"></div>
+<button class="save" onclick="savePrices()">💾 सर्व किंमती सेव्ह करा</button>
+<button class="delete" onclick="logout()">Admin बंद करा</button>
+</div>
 
 <h2 style="text-align:center">🛍️ आमचे Products</h2>
-<div class="categories" id="categories"></div>
-<div class="products" id="products"></div>
+<input id="search" placeholder="🔍 Product शोधा" style="width:94%;margin:3%">
+<div id="categories" class="categories"></div>
+<div id="products" class="products"></div>
 
-<section class="cart">
+<div class="cart">
 <h2>🛒 Shopping Cart</h2>
 <div id="cartItems">Cart रिकामी आहे.</div>
 <h3 id="total">Total: ₹0</h3>
-
 <input id="customer" placeholder="ग्राहकाचे नाव">
 <input id="address" placeholder="पूर्ण पत्ता">
-
 <select id="payment">
 <option value="COD">Cash on Delivery</option>
 <option value="UPI">UPI Payment</option>
 </select>
-
-<button class="pay" onclick="payUPI()">Pay with UPI</button>
-<button class="order" onclick="placeOrder()">📲 WhatsApp वर Order करा</button>
-</section>
+<button class="pay" onclick="payUPI()">UPI Payment</button>
+<button class="order" onclick="placeOrder()">WhatsApp Order</button>
+</div>
 
 <footer>
 <h3>MAULI MOBILE SHOP</h3>
 <p>Mobile Repairing & Accessories</p>
-<p>Contact: 9022459180</p>
+<p>9022459180</p>
 </footer>
 
 <script>
-const UPI_ID="9022459180@ybl";
-const WHATSAPP="919022459180";
 const PIN="1234";
+const UPI="9022459180@ybl";
+const WHATSAPP="919022459180";
 
 const cats=[
 "Mobile Accessories","Chargers & Cables","Earphones",
@@ -108,42 +113,42 @@ const cats=[
 "Speakers","Electronics","Mobile Phone"
 ];
 
-const defaultProducts=[
+const initial=[
 ["Mobile Cover","Mobile Accessories","📱"],
 ["Tempered Glass","Mobile Accessories","🛡️"],
 ["Mobile Charger","Chargers & Cables","🔌"],
-["USB Data Cable","Chargers & Cables","🔗"],
+["USB Cable","Chargers & Cables","🔗"],
 ["Bluetooth Earphones","Earphones","🎧"],
 ["Wired Earphones","Earphones","🎵"],
 ["LED Bulb","LED Lights","💡"],
 ["LED Tube Light","LED Lights","💡"],
-["Mobile Repairing Service","Mobile Repairing","🔧"],
+["Mobile Repairing","Mobile Repairing","🔧"],
 ["DTH Setup Box","DTH & Remote","📺"],
 ["TV Remote","DTH & Remote","🎮"],
 ["Bluetooth Speaker","Speakers","🔊"],
 ["Home Speaker","Speakers","📢"],
 ["Electronic Switch","Electronics","⚡"],
-["Electronic Accessories","Electronics","🔋"],
 ["Smartphone","Mobile Phone","📱"]
 ];
 
-function loadProducts(){
+function load(){
  try{
- const saved=localStorage.getItem("mauliProducts");
- if(saved)return JSON.parse(saved);
+ let data=JSON.parse(localStorage.getItem("mauliV4"));
+ if(Array.isArray(data))return data;
  }catch(e){}
- return defaultProducts.map((p,i)=>({
- id:i+1,name:p[0],cat:p[1],icon:p[2],price:null,image:""
+ return initial.map((p,i)=>({
+ id:i+1,name:p[0],cat:p[1],icon:p[2],image:"",
+ variants:[]
  }));
 }
 
-let products=loadProducts();
+let products=load();
 let cart=[];
 let selected="All";
 let isAdmin=false;
 
-function saveData(){
- localStorage.setItem("mauliProducts",JSON.stringify(products));
+function persist(){
+ localStorage.setItem("mauliV4",JSON.stringify(products));
 }
 
 function esc(s){
@@ -153,211 +158,261 @@ function esc(s){
  })[c]);
 }
 
-function adminLogin(){
- if(isAdmin){adminLogout();return;}
- let pin=prompt("Admin PIN टाका:");
+function login(){
+ let pin=prompt("Admin PIN टाका");
  if(pin===PIN){
  isAdmin=true;
  document.getElementById("admin").classList.remove("hidden");
  renderEditor();
- }else if(pin!==null){
- alert("चुकीचा PIN!");
- }
+ }else if(pin!==null)alert("चुकीचा PIN");
 }
 
-function adminLogout(){
+function logout(){
  isAdmin=false;
  document.getElementById("admin").classList.add("hidden");
 }
 
-function renderEditor(){
- document.getElementById("priceEditor").innerHTML=
- products.map(p=>`
- <div class="cart-item">
- <b>${esc(p.name)}</b>
- <div class="row">
- <input type="number" min="0" placeholder="किंमत ₹"
- data-price-id="${p.id}" value="${p.price??''}">
- <button class="delete" onclick="removeProduct(${p.id})">Delete</button>
- </div>
- </div>`).join("");
-}
+document.getElementById("pcat").innerHTML=
+ cats.map(c=>`<option>${esc(c)}</option>`).join("");
 
-function savePrices(){
- document.querySelectorAll("[data-price-id]").forEach(el=>{
- let p=products.find(x=>x.id===Number(el.dataset.priceId));
- if(p){
- p.price=el.value===""?null:Number(el.value);
- }
- });
- saveData();
- showProducts();
- renderEditor();
- alert("सर्व किंमती सेव्ह झाल्या!");
+function updateSelectors(){
+ document.getElementById("existing").innerHTML=
+ products.map(p=>`<option value="${p.id}">${esc(p.name)}</option>`).join("");
 }
 
 function addProduct(){
  if(!isAdmin)return;
- let name=document.getElementById("newName").value.trim();
- let cat=document.getElementById("newCat").value;
- let price=document.getElementById("newPrice").value;
- let image=document.getElementById("newImage").value.trim();
+ let name=document.getElementById("pname").value.trim();
+ let cat=document.getElementById("pcat").value;
+ let image=document.getElementById("pimage").value.trim();
+ let vn=document.getElementById("vname").value.trim();
+ let price=document.getElementById("vprice").value;
+ let stock=document.getElementById("vstock").value;
 
- if(!name||price===""||Number(price)<0){
- alert("Product नाव आणि योग्य किंमत भरा.");
- return;
+ if(!name||!vn||price===""||stock===""){
+ alert("सर्व आवश्यक माहिती भरा");return;
+ }
+ if(Number(price)<0||Number(stock)<0){
+ alert("किंमत आणि Stock शून्यापेक्षा कमी नसावा");return;
  }
  if(image&&!image.startsWith("https://")){
- alert("Photo URL https:// ने सुरू होणारा असावा.");
- return;
+ alert("Photo URL https:// ने सुरू होणारा हवा");return;
  }
 
  products.push({
- id:Date.now(),name:name,cat:cat,
- price:Number(price),image:image,icon:"🛍️"
+ id:Date.now(),name,cat,image,icon:"🛍️",
+ variants:[{
+ id:Date.now()+1,name:vn,
+ price:Number(price),stock:Number(stock)
+ }]
  });
 
- saveData();
- showProducts();
- renderEditor();
+ persist();refreshAdmin();refresh();
+ document.getElementById("pname").value="";
+ document.getElementById("vname").value="";
+ document.getElementById("vprice").value="";
+ document.getElementById("vstock").value="";
+ document.getElementById("pimage").value="";
+ alert("Product जोडला!");
+}
 
- document.getElementById("newName").value="";
- document.getElementById("newPrice").value="";
- document.getElementById("newImage").value="";
- alert("नवीन Product जोडला!");
+function addVariant(){
+ if(!isAdmin)return;
+ let id=Number(document.getElementById("existing").value);
+ let p=products.find(x=>x.id===id);
+ let name=document.getElementById("variantName").value.trim();
+ let price=document.getElementById("variantPrice").value;
+ let stock=document.getElementById("variantStock").value;
+
+ if(!p||!name||price===""||stock===""){
+ alert("प्रकार, किंमत आणि Stock भरा");return;
+ }
+ if(Number(price)<0||Number(stock)<0){
+ alert("अयोग्य किंमत किंवा Stock");return;
+ }
+
+ p.variants.push({
+ id:Date.now(),name,
+ price:Number(price),stock:Number(stock)
+ });
+ persist();refreshAdmin();refresh();
+ document.getElementById("variantName").value="";
+ document.getElementById("variantPrice").value="";
+ document.getElementById("variantStock").value="";
+ alert("नवीन प्रकार जोडला!");
+}
+
+function renderEditor(){
+ document.getElementById("editor").innerHTML=
+ products.map(p=>`
+ <div class="item">
+ <b>${esc(p.name)}</b> (${esc(p.cat)})
+ ${p.variants.map(v=>`
+ <div class="variant">
+ <input data-vname="${v.id}" value="${esc(v.name)}" placeholder="प्रकार">
+ <input data-vprice="${v.id}" type="number" min="0" value="${v.price}">
+ <input data-vstock="${v.id}" type="number" min="0" value="${v.stock}">
+ <button class="delete" onclick="removeVariant(${p.id},${v.id})">Delete Variant</button>
+ </div>`).join("")}
+ <button class="delete" onclick="removeProduct(${p.id})">Delete Product</button>
+ </div>`).join("");
+}
+
+function savePrices(){
+ if(!isAdmin)return;
+ products.forEach(p=>p.variants.forEach(v=>{
+ let n=document.querySelector(`[data-vname="${v.id}"]`);
+ let pr=document.querySelector(`[data-vprice="${v.id}"]`);
+ let st=document.querySelector(`[data-vstock="${v.id}"]`);
+ if(n&&n.value.trim())v.name=n.value.trim();
+ if(pr&&pr.value!==""&&Number(pr.value)>=0)v.price=Number(pr.value);
+ if(st&&st.value!==""&&Number(st.value)>=0)v.stock=Number(st.value);
+ }));
+ persist();refreshAdmin();refresh();
+ alert("किंमती आणि Stock सेव्ह झाले!");
+}
+
+function removeVariant(pid,vid){
+ if(!isAdmin||!confirm("हा प्रकार काढायचा?"))return;
+ let p=products.find(x=>x.id===pid);
+ p.variants=p.variants.filter(v=>v.id!==vid);
+ persist();refreshAdmin();refresh();
 }
 
 function removeProduct(id){
- if(!isAdmin||!confirm("हा Product काढायचा आहे?"))return;
+ if(!isAdmin||!confirm("हा Product काढायचा?"))return;
  products=products.filter(p=>p.id!==id);
- cart=cart.filter(x=>x.id!==id);
- saveData();
- showProducts();
- showCart();
- renderEditor();
+ cart=cart.filter(x=>x.pid!==id);
+ persist();refreshAdmin();refresh();
 }
 
 function showCategories(){
  document.getElementById("categories").innerHTML=
  ["All",...cats].map(c=>`
  <button class="${selected===c?'active':''}"
- onclick="selectCategory('${c}')">${esc(c)}</button>
- `).join("");
+ onclick="selectCategory('${c}')">${esc(c)}</button>`).join("");
 }
 
 function selectCategory(c){
- selected=c;
- showCategories();
- showProducts();
+ selected=c;showCategories();showProducts();
 }
 
 function showProducts(){
  let q=document.getElementById("search").value.toLowerCase();
  let list=products.filter(p=>
  (selected==="All"||p.cat===selected)&&
- (p.name.toLowerCase().includes(q)||
- p.cat.toLowerCase().includes(q))
+ (p.name.toLowerCase().includes(q)||p.cat.toLowerCase().includes(q))
  );
 
- document.getElementById("products").innerHTML=
- list.map(p=>`
+ document.getElementById("products").innerHTML=list.map(p=>`
  <div class="card">
- ${p.image?
- `<img src="${esc(p.image)}" alt="${esc(p.name)}">`:
+ ${p.image?`<img src="${esc(p.image)}" alt="${esc(p.name)}">`:
  `<div class="emoji">${esc(p.icon)}</div>`}
  <h3>${esc(p.name)}</h3>
- <p class="price">${p.price===null?
- "किंमत उपलब्ध नाही":"₹"+p.price}</p>
- <button class="add" onclick="addCart(${p.id})"
- ${p.price===null?"disabled":""}>
- Add to Cart +
+ ${p.variants.length?p.variants.map(v=>`
+ <div class="variant">
+ <b>${esc(v.name)}</b>
+ <p class="price">₹${v.price}</p>
+ <p class="small">Stock: ${v.stock}</p>
+ <button class="add" onclick="addCart(${p.id},${v.id})"
+ ${v.stock<=0?"disabled":""}>
+ ${v.stock<=0?"Out of Stock":"Add to Cart"}
  </button>
+ </div>`).join(""):"<p>किंमत लवकरच उपलब्ध होईल.</p>"}
  </div>`).join("")||"<p>Product सापडला नाही.</p>";
 }
 
-function addCart(id){
- let p=products.find(x=>x.id===id);
- if(!p||p.price===null)return;
- let item=cart.find(x=>x.id===id);
+function addCart(pid,vid){
+ let p=products.find(x=>x.id===pid);
+ let v=p?.variants.find(x=>x.id===vid);
+ if(!v||v.stock<=0)return;
+ let item=cart.find(x=>x.pid===pid&&x.vid===vid);
+ let qty=item?item.qty:0;
+ if(qty>=v.stock){alert("इतका Stock उपलब्ध नाही");return;}
  if(item)item.qty++;
- else cart.push({id:id,qty:1});
+ else cart.push({pid,vid,qty:1});
  showCart();
 }
 
-function changeQty(id,n){
- let item=cart.find(x=>x.id===id);
+function changeQty(pid,vid,n){
+ let item=cart.find(x=>x.pid===pid&&x.vid===vid);
  if(!item)return;
+ let p=products.find(x=>x.id===pid);
+ let v=p?.variants.find(x=>x.id===vid);
+ if(n>0&&item.qty>=v.stock){alert("Stock उपलब्ध नाही");return;}
  item.qty+=n;
- if(item.qty<=0)cart=cart.filter(x=>x.id!==id);
+ if(item.qty<=0)cart=cart.filter(x=>x!==item);
  showCart();
 }
 
-function getTotal(){
- return cart.reduce((sum,x)=>{
- let p=products.find(y=>y.id===x.id);
- return sum+(p?p.price*x.qty:0);
+function total(){
+ return cart.reduce((s,x)=>{
+ let p=products.find(p=>p.id===x.pid);
+ let v=p?.variants.find(v=>v.id===x.vid);
+ return s+(v?v.price*x.qty:0);
  },0);
 }
 
 function showCart(){
- let el=document.getElementById("cartItems");
- if(!cart.length)el.innerHTML="Cart रिकामी आहे.";
- else el.innerHTML=cart.map(x=>{
- let p=products.find(y=>y.id===x.id);
- if(!p)return "";
- return `<div class="cart-item">
- ${esc(p.name)} — ₹${p.price} × ${x.qty}
- <button onclick="changeQty(${x.id},-1)">−</button>
- <button onclick="changeQty(${x.id},1)">+</button>
+ document.getElementById("cartItems").innerHTML=cart.length?
+ cart.map(x=>{
+ let p=products.find(p=>p.id===x.pid);
+ let v=p?.variants.find(v=>v.id===x.vid);
+ if(!p||!v)return "";
+ return `<div class="item">
+ ${esc(p.name)} - ${esc(v.name)}<br>
+ ₹${v.price} × ${x.qty}
+ <button onclick="changeQty(${x.pid},${x.vid},-1)">−</button>
+ <button onclick="changeQty(${x.pid},${x.vid},1)">+</button>
  </div>`;
- }).join("");
-
- document.getElementById("total").innerText="Total: ₹"+getTotal();
+ }).join(""):"Cart रिकामी आहे.";
+ document.getElementById("total").innerText="Total: ₹"+total();
 }
 
-function orderMessage(){
+function message(){
  let name=document.getElementById("customer").value.trim();
  let address=document.getElementById("address").value.trim();
- if(!cart.length){alert("आधी Product निवडा.");return null;}
- if(!name||!address){
- alert("नाव आणि पत्ता भरा.");return null;
+ if(!cart.length||!name||!address){
+ alert("Product, नाव आणि पत्ता भरा");return null;
  }
-
  let lines=cart.map(x=>{
- let p=products.find(y=>y.id===x.id);
- return p.name+" x "+x.qty+" = Rs."+p.price*x.qty;
+ let p=products.find(p=>p.id===x.pid);
+ let v=p.variants.find(v=>v.id===x.vid);
+ return p.name+" - "+v.name+" x "+x.qty+
+ " = Rs."+v.price*x.qty;
  }).join("\n");
-
- return "MAULI MOBILE SHOP ORDER\n"+
- "Name: "+name+"\nAddress: "+address+
- "\n\n"+lines+"\n\nTotal: Rs."+getTotal()+
+ return "MAULI MOBILE SHOP ORDER\nName: "+name+
+ "\nAddress: "+address+"\n\n"+lines+
+ "\n\nTotal: Rs."+total()+
  "\nPayment: "+document.getElementById("payment").value;
 }
 
 function placeOrder(){
- let msg=orderMessage();
- if(!msg)return;
+ let msg=message();if(!msg)return;
  window.open("https://wa.me/"+WHATSAPP+
  "?text="+encodeURIComponent(msg),"_blank");
 }
 
 function payUPI(){
- let msg=orderMessage();
- if(!msg)return;
- let total=getTotal();
- if(total<=0){alert("किंमत तपासा.");return;}
- let url="upi://pay?pa="+encodeURIComponent(UPI_ID)+
- "&pn=MAULI%20MOBILE%20SHOP&am="+total+
- "&cu=INR&tn="+encodeURIComponent("Mobile Shop Order");
+ let msg=message();if(!msg)return;
+ let amount=total();
+ if(amount<=0)return;
+ let url="upi://pay?pa="+encodeURIComponent(UPI)+
+ "&pn=MAULI%20MOBILE%20SHOP&am="+amount+
+ "&cu=INR&tn="+encodeURIComponent("Shop Order");
  window.location.href=url;
 }
 
-document.getElementById("newCat").innerHTML=
- cats.map(c=>`<option>${esc(c)}</option>`).join("");
+function refreshAdmin(){
+ updateSelectors();renderEditor();
+}
 
-showCategories();
-showProducts();
-showCart();
+function refresh(){
+ showCategories();showProducts();showCart();
+}
+
+document.getElementById("search").addEventListener("input",showProducts);
+updateSelectors();refresh();
 </script>
 </body>
 </html>
